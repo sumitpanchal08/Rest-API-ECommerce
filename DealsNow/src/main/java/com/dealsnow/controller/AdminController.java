@@ -25,6 +25,9 @@ import com.dealsnow.models.Product;
 import com.dealsnow.models.ProductImg;
 import com.dealsnow.models.Promocode;
 import com.dealsnow.service.AdminService;
+import com.dealsnow.service.CategoryService;
+import com.dealsnow.service.ProductService;
+import com.dealsnow.service.PromocodeService;
 
 @RestController
 @RequestMapping("/Admin")
@@ -32,60 +35,73 @@ public class AdminController {
 	@Autowired
 	private AdminService adminService;
 	
+	@Autowired
+	private ProductService productService;
+	
+	@Autowired
+	private CategoryService categoryService;
+	
+	@Autowired
+	private PromocodeService promocodeService;
+	
 	@PostMapping("/register")
 	public ResponseEntity<Admin> registerAdmin(@Valid @RequestBody Admin admin){
 		return new ResponseEntity<>(adminService.registerAdmin(admin),HttpStatus.ACCEPTED);
 	}
 	
-	@GetMapping("/login")
-	public ResponseEntity<Admin> loginAdmin(@Valid @RequestBody AdminDTO adminDTO){
+	@PostMapping("/login")
+	public ResponseEntity<String> loginAdmin(@Valid @RequestBody AdminDTO adminDTO){
 		return new ResponseEntity<>(adminService.loginAdmin(adminDTO),HttpStatus.ACCEPTED);
 	}
 	
-	@DeleteMapping("/logout/{userId}")
-	public ResponseEntity<String> logoutAdmin(@Valid @PathVariable("userId") Integer userId){
-		return new ResponseEntity<String>(adminService.logoutAdmin(userId),HttpStatus.ACCEPTED);
+	@DeleteMapping("/logout/{uuid}")
+	public ResponseEntity<String> logoutAdmin(@Valid @PathVariable("uuid") String uuid){
+		return new ResponseEntity<String>(adminService.logoutAdmin(uuid),HttpStatus.ACCEPTED);
 	}
 	
 	//add new product
-	@PostMapping("/product/{catId}")
-	public ResponseEntity<Product> addProduct(@Valid @RequestBody Product p,@PathVariable("catId") Integer catId){
-		return new ResponseEntity<Product>(adminService.addProduct(p, catId),HttpStatus.ACCEPTED);
+	@PostMapping("/product/{uuid}/{catId}")
+	public ResponseEntity<Product> addProduct(@Valid @RequestBody Product p,@PathVariable("catId") Integer catId,@PathVariable("uuid") String uuid){
+		adminService.checkLoginStatus(uuid);
+		return new ResponseEntity<Product>(productService.addProduct(p, catId),HttpStatus.ACCEPTED);
 	}
 	
 	//get all Products available in database..
 	@GetMapping("/product")
 	public ResponseEntity<List<Product>> getAllProducts(){
-		return new ResponseEntity<List<Product>>(adminService.viewProducts(),HttpStatus.FOUND);
+		return new ResponseEntity<List<Product>>(productService.viewProducts(),HttpStatus.ACCEPTED);
 	}
 	
 	//Search Products by products name..
 	@GetMapping("/product/{m}")
 	public ResponseEntity<List<Product>> searchProducts(@PathVariable("m") String m){
-		return new ResponseEntity<List<Product>>(adminService.searchProducts(m),HttpStatus.FOUND);
+		return new ResponseEntity<List<Product>>(productService.searchProducts(m),HttpStatus.ACCEPTED);
 	}
 	
 	//add product Images
-	@PutMapping("/product/{pid}")
-	public ResponseEntity<Product> addImgs(@Valid @RequestBody List<ProductImg> imgs,@PathVariable("pid") Integer pid){
-		return new ResponseEntity<Product>(adminService.addProductImg(pid, imgs),HttpStatus.ACCEPTED);
+	@PutMapping("/product/{uuid}/{pid}")
+	public ResponseEntity<Product> addImgs(@Valid @RequestBody List<ProductImg> imgs,@PathVariable("pid") Integer pid,@PathVariable("uuid") String uuid){
+		adminService.checkLoginStatus(uuid);
+		return new ResponseEntity<Product>(productService.addProductImg(pid, imgs),HttpStatus.ACCEPTED);
 	}
 	
 	//add category
-	@PostMapping("/category")
-	public ResponseEntity<Category> addCategory(@Valid @RequestBody Category cat){
-		return new ResponseEntity<Category>(adminService.addCategory(cat),HttpStatus.ACCEPTED);
+	@PostMapping("/category/{uuid}")
+	public ResponseEntity<Category> addCategory(@Valid @RequestBody Category cat,@PathVariable("uuid") String uuid){
+		adminService.checkLoginStatus(uuid);
+		return new ResponseEntity<Category>(categoryService.addCategory(cat),HttpStatus.ACCEPTED);
 	}
 	
 	//add Promocode
-	@PostMapping("/promocode")
-	public ResponseEntity<Promocode> addPromocode(@Valid @RequestBody Promocode p){
-		return new ResponseEntity<Promocode>(adminService.addPromocode(p),HttpStatus.ACCEPTED);
+	@PostMapping("/promocode/{uuid}")
+	public ResponseEntity<Promocode> addPromocode(@Valid @RequestBody Promocode p,@PathVariable("uuid") String uuid){
+		adminService.checkLoginStatus(uuid);
+		return new ResponseEntity<Promocode>(promocodeService.addPromocode(p),HttpStatus.ACCEPTED);
 	}
 	
 	//view Promocodes
 	@GetMapping("/promocode")
 	public ResponseEntity<List<Promocode>> getAllPromocodes(){
-		return new ResponseEntity<List<Promocode>>(adminService.viewPromocodes(),HttpStatus.FOUND);
+		return new ResponseEntity<List<Promocode>>(promocodeService.viewPromocodes(),HttpStatus.ACCEPTED);
 	}
 }

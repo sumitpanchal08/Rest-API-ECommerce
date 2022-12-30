@@ -65,7 +65,7 @@ public class User {
 	@JoinColumn(name="user_id")
 	private Set<Address> addresses;
 	
-	//Orders linked with User(Unidirectional Mapping)
+	//Orders linked with User(bidirectional Mapping)
 	@OneToMany(mappedBy="user",cascade = CascadeType.ALL)
 	private List<CartOrder> orders;
 }

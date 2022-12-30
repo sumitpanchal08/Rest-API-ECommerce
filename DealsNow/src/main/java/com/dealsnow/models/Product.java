@@ -47,7 +47,7 @@ public class Product {
 	private Set<ProductImg> imgs;
 	
 	//Product ratings (Bidirectional mapping)
-//	@JsonIgnore
+	@JsonIgnore
 	@OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
 	private List<Rating> ratings;
 }

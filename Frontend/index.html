@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/index.css">
+    <script src="js/index.js"></script>
+    <title>Deals Now</title>
+</head>
+<body>
+    <header>
+        <div id="navbar">
+            <div class="logo">DealsNow</div>
+            <div>
+                <p onclick="goHome()">Home</p>
+                <p onclick="goProduct()">Products</p>
+                <p>About</p>
+                <p>Contact</p>
+            </div>
+            <div>
+                <p>Login</p>
+                <p>Cart</p>
+            </div>
+        </div>
+        <div id="belownavbar"></div>
+        
+    </header>
+    <main id="home">
+        This is Home Page!!
+
+    </main>
+    <main id="products">
+        <!-- Left Part of Product Page  -->
+        <div>
+            <div>
+                <h3>&#10136; Category</h3>
+                <div id="listCategory">
+                    <div><input type="checkbox" class="required-entry">
+                    <label for="">sample</label></div>
+                    <div>
+                        <input type="checkbox" class="required-entry">
+                    <label for="">sample2</label>
+                    </div>
+                    <div><input type="checkbox" class="required-entry">
+                        <label for="">sample</label></div>
+                        <div>
+                            <input type="checkbox" class="required-entry">
+                        <label for="">sample2</label>
+                        </div>
+                    
+                </div>
+            </div>
+            <div>
+                <h3>&#10136; Brand</h3>
+                <div id="listBrand">
+                    <div><input type="checkbox" class="required-entry">
+                        <label for="">sample</label></div>
+                        <div>
+                            <input type="checkbox" class="required-entry">
+                        <label for="">sample2</label>
+                        </div>
+                </div>
+            </div>
+            <div>
+                <h3>&#10136; Price</h3>
+                <div id="listPrice">
+                    <div>
+                        <input type="text" placeholder="less than....">
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Right Part of Product Page -->
+        <div>
+            <div id="search">
+                <input id="searchInput" type="text" placeholder="Search Products Here..." oninput="debounce(searchProducts,1000)">
+            </div>
+
+            <div id="resultProducts">
+                <!-- <div>
+                    <div>
+                        <img src="https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-12-3.jpg" alt="">
+                    </div>
+                    <p>category</p>
+                    <h3>Name_big_name</h3>
+                    <p>$200</p>
+                </div> -->
+                
+            </div>
+        </div>
+
+    </main>
+    <footer>
+    </footer>
+</body>
+</html>

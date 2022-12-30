@@ -26,10 +26,7 @@ public class Promocode {
 	@NotNull(message = "code cannot be null.")
 	@NotBlank(message = "code status cannot be blank.")
 	@NotEmpty(message = "code status cannot be empty.")
-	@Min(5)
 	private String code;
-	@NotNull(message = "Amount cannot be null.")
-	@NotBlank(message = "Amount status cannot be blank.")
-	@NotEmpty(message = "Amount status cannot be empty.")
+	
 	private Integer amt;
 }

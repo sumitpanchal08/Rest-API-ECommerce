@@ -56,7 +56,10 @@ public class CartOrder {
 	@JoinColumn(name = "paymentId")
 	private Payment payment;
 	
-	
+	//Address details....(Unidirectional mapping)
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "addressId")
+	private Address address;
 	
 	
 	

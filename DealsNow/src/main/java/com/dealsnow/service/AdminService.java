@@ -15,16 +15,8 @@ import com.dealsnow.models.Promocode;
 
 public interface AdminService {
 	public Admin registerAdmin(Admin admin)throws AdminException;
-	public Admin loginAdmin(AdminDTO adminDTO)throws AdminException;
-	public String logoutAdmin(Integer userId)throws AdminException;
+	public String loginAdmin(AdminDTO adminDTO)throws AdminException;
+	public String logoutAdmin(String uuid)throws AdminException;
+	public Boolean checkLoginStatus(String uuid)throws AdminException;
 	
-	public Product addProduct(Product product,Integer categoryId)throws ProductException,CategoryException;
-	public Product addProductImg(Integer productId,List<ProductImg> imgs)throws ProductException;
-	public Category addCategory(Category category)throws CategoryException;
-	public Promocode addPromocode(Promocode promocode)throws PromocodeException;
-	
-	public List<Product> viewProducts() throws ProductException;
-	public List<Promocode> viewPromocodes() throws PromocodeException;
-	
-	public List<Product> searchProducts(String m) throws ProductException;
 }

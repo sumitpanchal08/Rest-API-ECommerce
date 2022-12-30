@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&family=Roboto:wght@500&family=Ubuntu&display=swap');
+/* font-family: 'Roboto', sans-serif;
+font-family: 'Roboto Slab', serif;
+font-family: 'Ubuntu', sans-serif; */
+
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+}
+#navbar{
+    margin: 20px 0px;
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+#navbar>div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#navbar>div>p{
+    margin: 10px 20px;
+    cursor: pointer;
+}
+.logo{
+    font-weight: bolder;
+    font-family: 'Ubuntu', sans-serif;
+    color: rgb(88, 88, 88);
+    font-size: 1.4rem;
+}
+#belownavbar{
+    background-color: rgb(88, 88, 88);
+    height: 25px;
+}
+#search{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#search>input{
+    margin: 10px 0px;
+    width: 50%;
+    font-size: 1.1rem;
+    text-align: center;
+    padding: 5px 0px;
+}
+#home{
+    display: block;
+}
+#products{
+    display: none;
+    justify-content: center;
+    align-items: flex-start;
+}
+#products>div:nth-child(1){
+    background-color: rgb(88, 88, 88);
+    color: white;
+    width: 20%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+#products>div:nth-child(1)>div{
+    margin: 20px auto;
+    width: 70%;
+}
+#products>div:nth-child(1)>div>div{
+    margin-left: 20px;
+}
+#products>div:nth-child(1)>div>div>div{
+    margin: 10px 0px;
+    font-size: 1.1rem;
+}
+#listPrice>div>input{
+    width: 50%;
+}
+#products>div:nth-child(2){
+    width: 80%;
+}
+#resultProducts{
+    display: grid;
+    margin: 25px 30px;
+    grid-template-columns: repeat(4,1fr);
+    gap: 20px;
+}
+#resultProducts>div>div>img{
+    max-width: 100%;
+    max-height: 200px;
+}
+
+
+
+
+
+
+
+
+
+
+.required-entry{
+    display: inline-block;
+}
