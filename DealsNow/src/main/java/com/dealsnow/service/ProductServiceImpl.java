@@ -88,4 +88,25 @@ public class ProductServiceImpl implements ProductService{
 		return products;
 	}
 
+	@Override
+	public List<Product> searchByBrand(String m) throws ProductException {
+		// TODO Auto-generated method stub
+		String pString="%"+m+"%";
+		List<Product> products=productdao.searchByBrand(pString);
+		if(products.size()==0) {
+			throw new ProductException("No product found!!");
+		}
+		return products;
+	}
+
+	@Override
+	public List<Product> searchByPriceLessThan(Double m) throws ProductException {
+		// TODO Auto-generated method stub
+		List<Product> products=productdao.priceLessThen(m);
+		if(products.size()==0) {
+			throw new ProductException("No product found!!");
+		}
+		return products;
+	}
+
 }

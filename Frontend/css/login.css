@@ -1,0 +1,109 @@
+*{
+    padding: 0;
+    margin: 0;
+    font-family: 'Ubuntu', sans-serif;
+}
+body{
+    background-color: #F3F3F3;
+}
+#main{
+    max-width: 360px;
+    margin: 60px auto;
+    border-radius: 13px;
+    border: 1px solid rgb(220, 220, 220);
+    background-color: white;
+}
+#main>#backToHome>img{
+    width: 20px;
+    margin: 18px 0px 0px 18px;
+    cursor: pointer;
+}
+#main>:nth-child(2){
+    width: 80%;
+    margin: 15px auto;
+}
+#main>:nth-child(2)>h1{
+    margin-bottom: 15px;
+}
+#main>:nth-child(2)>p{
+    margin-bottom: 15px;
+    line-height: 24px;
+    color: rgb(100, 100, 100);
+}
+#main>:nth-child(2)>hr{
+    border-bottom: none;
+    background-color: rgb(193, 193, 193);
+    margin-bottom: 15px;
+
+}
+#main>:nth-child(2)>img{
+    width: 100%;
+    margin-bottom: 15px;
+}
+#main>:nth-child(2)>button{
+    width: 100%;
+    margin-bottom: 15px;
+    font-size: 18px;
+    padding: 10px 4px;
+    border-radius: 4px;
+}
+#main>:nth-child(2)>:nth-child(6){
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+#main>:nth-child(2)>:nth-child(7){
+    background-color: white;
+    border: 1px solid #dbdbdb;
+    color: rgb(93, 93, 93);
+    cursor: pointer;
+}
+
+
+/* login start  */
+
+#login{
+    display: none;
+    max-width: 360px;
+    margin: 60px auto;
+    border-radius: 13px;
+    border: 1px solid rgb(220, 220, 220);
+    background-color: white;
+    min-height: 90vh;
+}
+#login>:nth-child(1){
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 10px 0px 10px;
+}
+#login>:nth-child(1)>img{
+    width: 20px;
+}
+#login>:nth-child(1)>h3{
+    margin: 20px;
+    margin-right: 100px;
+}
+#login>:nth-child(2){
+    margin: 0px 25px;
+}
+#login>:nth-child(2)>h3{
+    text-align: center;
+    margin: 15px 0px;
+}
+#login>:nth-child(2)>input{
+    width: 100%;
+    padding: 10px 0px;
+    font-size: 16px;
+    text-align: center;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    border: 1px solid #333;
+}
+#login>:nth-child(2)>:nth-child(5){
+    background-color: #333;
+    color: white;
+    margin-top: 50px;
+}
+

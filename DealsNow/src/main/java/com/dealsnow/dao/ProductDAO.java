@@ -14,5 +14,9 @@ import com.dealsnow.models.Product;
 public interface ProductDAO extends JpaRepository<Product, Integer>{
 	@Query("select p from Product p where name LIKE :m ")
 	public List<Product> search(@Param("m") String g);
+	@Query("select p from Product p where brand LIKE :m ")
+	public List<Product> searchByBrand(@Param("m")String g);
+	@Query("select p from Product p where sellPrice <= :m ")
+	public List<Product> priceLessThen(@Param("m")Double g);
 	public List<Product> findByCategory(Category category);
 }

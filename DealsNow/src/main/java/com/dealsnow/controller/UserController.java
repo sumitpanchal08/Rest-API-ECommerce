@@ -5,18 +5,22 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dealsnow.models.Address;
 import com.dealsnow.models.Category;
+import com.dealsnow.models.CurrentSession;
 import com.dealsnow.models.Product;
 import com.dealsnow.models.User;
 import com.dealsnow.models.UserDTO;
@@ -43,8 +47,12 @@ public class UserController {
 	}
 	
 	@PostMapping("/login")
-	public ResponseEntity<String> loginUser(@Valid @RequestBody UserDTO userdto){
-		return new ResponseEntity<String>(userService.loginUser(userdto),HttpStatus.ACCEPTED);
+	public ResponseEntity<CurrentSession> loginUser(@Valid @RequestBody UserDTO userdto){
+		return new ResponseEntity<>(userService.loginUser(userdto),HttpStatus.ACCEPTED);
+	}
+	@GetMapping("/login/details/{uuid}")
+	public ResponseEntity<User> loginDetails(@PathVariable("uuid") String uuid){
+		return new ResponseEntity<>(userService.getLoginDetails(uuid),HttpStatus.ACCEPTED);
 	}
 	
 	@DeleteMapping("/logout/{uuid}")
@@ -72,9 +80,25 @@ public class UserController {
 		return new ResponseEntity<List<Product>>(productService.searchByCategory(catid),HttpStatus.ACCEPTED);
 	}
 	
+	@GetMapping("/product/byBrand/{val}")
+	public ResponseEntity<List<Product>> getByBrand(@PathVariable("val")String val){
+		return new ResponseEntity<List<Product>>(productService.searchByBrand(val),HttpStatus.ACCEPTED);
+	}
 	
+	@GetMapping("/product/price/{val}")
+	public ResponseEntity<List<Product>> getPriceLessThan(@PathVariable("val")Double val){
+		return new ResponseEntity<List<Product>>(productService.searchByPriceLessThan(val),HttpStatus.ACCEPTED);
+	}
 	
+	@PutMapping("/address/{id}")
+	public ResponseEntity<User> addAddress(@Valid @RequestBody Address address, @PathVariable("id")Integer userid){
+		return new ResponseEntity<User>(userService.addAddress(address, userid),HttpStatus.ACCEPTED);
+	}
 	
+	@DeleteMapping("/address/{id}")
+	public ResponseEntity<Address> deleteAddress(@PathVariable("id") Integer id){
+		return new ResponseEntity<Address>(userService.deleteAddress(id),HttpStatus.ACCEPTED);
+	}
 	
 	
 	

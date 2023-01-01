@@ -7,6 +7,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dealsnow.dao.AddressDAO;
 import com.dealsnow.dao.CartOrderDAO;
 import com.dealsnow.dao.CurrentSessionDAO;
 import com.dealsnow.dao.UserDAO;
@@ -35,6 +36,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private CartOrderDAO cartOrderDAO;
+	
+	@Autowired
+	private AddressDAO addressDao;
 
 	@Override
 	public User registerUser(User user) throws UserException {
@@ -50,9 +54,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public String loginUser(UserDTO userDTO) throws UserException {
+	public CurrentSession loginUser(UserDTO userDTO) throws UserException {
 		// TODO Auto-generated method stub
-		User user=userdao.loginUser(userDTO.getMoblie(), userDTO.getPassword());
+		User user=userdao.loginUser(userDTO.getMobile(), userDTO.getPassword());
 		if(user==null) {
 			throw new UserException("Mobile and Password not match!!");
 		}
@@ -67,7 +71,7 @@ public class UserServiceImpl implements UserService {
 		}
 		CurrentSession cs2=new CurrentSession(user.getUserId(),key,LocalDateTime.now(),false);
 		csdao.save(cs2);
-		return cs2.getUuid();
+		return cs2;
 	}
 
 	@Override
@@ -78,6 +82,39 @@ public class UserServiceImpl implements UserService {
 		}
 		csdao.delete(cs);
 		return "Logout Successfull!!";
+	}
+
+
+	@Override
+	public Boolean checkLoginStatus(String uuid) throws AdminException {
+		// TODO Auto-generated method stub
+		CurrentSession cs=csdao.findByUuid(uuid);
+		if(cs==null) {
+			throw new AdminException("User Not Logged In with this number");
+		}
+		if(cs.getType()!=false) {
+			throw new AdminException("User Not Logged In with this number");
+		}
+		return true;
+	}
+
+	@Override
+	public User getLoginDetails(String uuid) throws UserException {
+		// TODO Auto-generated method stub
+		CurrentSession cs=csdao.findByUuid(uuid);
+		if(cs==null) {
+			throw new UserException("User Not Login!!0");
+		}
+		if(cs.getType()) {
+			throw new UserException("User Login Failed!!1");
+		}
+		
+		Optional<User> optional= userdao.findById(cs.getUserId());
+		if(!optional.isPresent()) {
+			throw new UserException("User Login Failed!!2");
+		}
+		
+		return optional.get();
 	}
 
 	@Override
@@ -116,15 +153,28 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Boolean checkLoginStatus(String uuid) throws AdminException {
+	public User addAddress(Address address, Integer userId) throws AddressException, UserException {
 		// TODO Auto-generated method stub
-		CurrentSession cs=csdao.findByUuid(uuid);
-		if(cs==null) {
-			throw new AdminException("User Not Logged In with this number");
+		Optional<User> optional=userdao.findById(userId);
+		if(!optional.isPresent()) {
+			throw new UserException("User Id is not Correct");
 		}
-		if(cs.getType()!=false) {
-			throw new AdminException("User Not Logged In with this number");
+		User user=optional.get();
+		Set<Address> addresses=user.getAddresses();
+		addresses.add(address);
+		user.setAddresses(addresses);
+		User user2=userdao.save(user);
+		return user2;
+	}
+
+	@Override
+	public Address deleteAddress(Integer id) throws AddressException {
+		// TODO Auto-generated method stub
+		Optional<Address> address=addressDao.findById(id);
+		if(!address.isPresent()) {
+			throw new AddressException("Address is not there");
 		}
-		return true;
+		addressDao.delete(address.get());
+		return address.get();
 	}
 }

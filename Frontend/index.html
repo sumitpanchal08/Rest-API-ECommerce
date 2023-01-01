@@ -15,11 +15,11 @@
             <div>
                 <p onclick="goHome()">Home</p>
                 <p onclick="goProduct()">Products</p>
-                <p>About</p>
-                <p>Contact</p>
+                <p onclick="goAddress()">Address</p>
+                <p onclick="goOrders()">Orders</p>
             </div>
             <div>
-                <p>Login</p>
+                <p id="login" onclick="login()">Login</p>
                 <p>Cart</p>
             </div>
         </div>
@@ -36,18 +36,6 @@
             <div>
                 <h3>&#10136; Category</h3>
                 <div id="listCategory">
-                    <div><input type="checkbox" class="required-entry">
-                    <label for="">sample</label></div>
-                    <div>
-                        <input type="checkbox" class="required-entry">
-                    <label for="">sample2</label>
-                    </div>
-                    <div><input type="checkbox" class="required-entry">
-                        <label for="">sample</label></div>
-                        <div>
-                            <input type="checkbox" class="required-entry">
-                        <label for="">sample2</label>
-                        </div>
                     
                 </div>
             </div>
@@ -66,7 +54,7 @@
                 <h3>&#10136; Price</h3>
                 <div id="listPrice">
                     <div>
-                        <input type="text" placeholder="less than....">
+                        <input type="text" id="filterByPrice" placeholder="less than...." oninput="debounce(priceLessThan,1000)">
                     </div>
                     
                 </div>
@@ -93,6 +81,26 @@
             </div>
         </div>
 
+    </main>
+    <main id="address">
+        <!-- form to add new Address -->
+        <div>
+            <form action="" id="addNewAddress" onsubmit="addAddress()">
+                <p>Add Address</p>
+                <input type="text" placeholder="Name" name="name" required>
+                <input type="text" placeholder="Mobile Number" name="mobile" required>
+                <input type="text" placeholder="House Number" name="house" required>
+                <input type="text" placeholder="City" name="city" required>
+                <input type="text" placeholder="State" name="state" required>
+                <input type="text" placeholder="LandMark" name="land" required>
+                <input type="text" placeholder="Pincode" name="pin" required>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+        <!-- List of addresses -->
+        <div id="listAddress">
+            
+        </div>
     </main>
     <footer>
     </footer>

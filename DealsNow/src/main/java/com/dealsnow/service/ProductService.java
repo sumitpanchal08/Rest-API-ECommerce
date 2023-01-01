@@ -13,4 +13,6 @@ public interface ProductService {
 	public List<Product> viewProducts() throws ProductException;
 	public List<Product> searchProducts(String m) throws ProductException;
 	public List<Product> searchByCategory(Integer catId) throws ProductException,CategoryException;
+	public List<Product> searchByBrand(String m) throws ProductException;
+	public List<Product> searchByPriceLessThan(Double m) throws ProductException;
 }
