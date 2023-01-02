@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dealsnow.models.Address;
+import com.dealsnow.models.CartOrder;
 import com.dealsnow.models.Category;
 import com.dealsnow.models.CurrentSession;
 import com.dealsnow.models.Product;
+import com.dealsnow.models.ProductOrderDetails;
 import com.dealsnow.models.User;
 import com.dealsnow.models.UserDTO;
 import com.dealsnow.service.CategoryService;
@@ -100,8 +102,35 @@ public class UserController {
 		return new ResponseEntity<Address>(userService.deleteAddress(id),HttpStatus.ACCEPTED);
 	}
 	
+	@PostMapping("/order/create/{userId}")
+	public ResponseEntity<CartOrder> createOrder(@PathVariable("userId") Integer userId){
+		return new ResponseEntity<CartOrder>(userService.createOrder(userId),HttpStatus.ACCEPTED);
+	}
 	
+	@PutMapping("/order/addToCart/{oid}/{pid}")
+	public ResponseEntity<CartOrder> addToCart(@PathVariable("oid")Integer oid,@PathVariable("pid")Integer pid, @RequestBody ProductOrderDetails pod){
+		return new ResponseEntity<CartOrder>(userService.addToCart(pod,oid,pid),HttpStatus.ACCEPTED);
+	}
 	
+	@PutMapping("/order/applyPromo/{id}")
+	public ResponseEntity<CartOrder> applyPromo(@PathVariable("id")Integer pid,@RequestBody CartOrder order){
+		return new ResponseEntity<CartOrder>(userService.applyPromo(order,pid),HttpStatus.ACCEPTED);
+	}
+	
+	@PutMapping("/order/removePromo")
+	public ResponseEntity<CartOrder> removePromo(@RequestBody CartOrder order){
+		return new ResponseEntity<CartOrder>(userService.removePromo(order),HttpStatus.ACCEPTED);
+	}
+	
+	@PutMapping("/order/addAddress/{id}")
+	public ResponseEntity<CartOrder> addAddress(@PathVariable("id")Integer pid,@RequestBody CartOrder order){
+		return new ResponseEntity<CartOrder>(userService.addAddress(order,pid),HttpStatus.ACCEPTED);
+	}
+	
+	@PutMapping("order/confirm/{uid}")
+	public ResponseEntity<CartOrder> confirmOrder(@PathVariable("uid")Integer uid,@RequestBody CartOrder order){
+		return new ResponseEntity<CartOrder>(userService.confirmOrder(order, uid),HttpStatus.ACCEPTED);
+	}
 	
 	
 }

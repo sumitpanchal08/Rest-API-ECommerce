@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/cart.css">
+    <title>Cart</title>
+</head>
+<body>
+    <div id="emptyCart">
+        <img src="https://www.rentomojo.com/public/images/error/no-cart.png" alt="">
+        <h1>No Items in Cart</h1>
+        <p>Add a few items to your cart and come back here for an
+            express checkout process!</p>
+            <div><button onclick="goToHome()">Browse catalogue</button></div>
+        
+    </div>
+    <div id="nonEmptyCart">
+        <div>
+            <div>
+                <div>
+                     <p>Total:-</p>
+                     <p id="total">null</p>
+                </div>
+                <div>
+                    <p>Discount:-</p>
+                    <p id="discount">null</p>
+                </div>
+                <div>
+                    <h3>Total:-</h3>
+                    <h3 id="overTotal">null</h3>
+                </div>
+            </div>
+            <div>
+                <input type="text" id="promocode" placeholder="Apply Promocode">
+                <p>Apply</p>
+            </div>
+            <div>
+                <select name="address" id="address">
+                    <option value="">Select Address here</option>
+                    <option value="add">Add New Address</option>
+                </select>
+            </div>
+            <div>
+                <button id="confirmOrder">Confirm Order</button>
+            </div>
+        </div>
+        <div id="products">
+            <div>
+                    <div>
+                        <img src="https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-12-3.jpg" alt="">
+                    </div>
+                    <p>category</p>
+                    <h3>Name_big_name</h3>
+                    <p>$200</p>
+                    <span> - </span><span>2</span><span> + </span>
+                    <button>Remove</button>
+                </div>
+        </div>
+    </div>
+    <button onclick="goToHome()">Browse catalogue</button>
+
+</body>
+<script src="js/cart.js"></script>
+</html>

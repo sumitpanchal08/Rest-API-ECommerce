@@ -3,10 +3,12 @@ package com.dealsnow.service;
 import com.dealsnow.exceptions.AddressException;
 import com.dealsnow.exceptions.AdminException;
 import com.dealsnow.exceptions.CartOrderException;
+import com.dealsnow.exceptions.PromocodeException;
 import com.dealsnow.exceptions.UserException;
 import com.dealsnow.models.Address;
 import com.dealsnow.models.CartOrder;
 import com.dealsnow.models.CurrentSession;
+import com.dealsnow.models.ProductOrderDetails;
 import com.dealsnow.models.User;
 import com.dealsnow.models.UserDTO;
 
@@ -17,7 +19,13 @@ public interface UserService {
 	public User getLoginDetails(String uuid) throws UserException;
 	public Boolean checkLoginStatus(String uuid)throws UserException;
 	
-    public CartOrder orderProducts(CartOrder order) throws CartOrderException;
+	public CartOrder createOrder(Integer userId)throws UserException;
+    public CartOrder addToCart(ProductOrderDetails p,Integer oid,Integer pid) throws CartOrderException;
+    public CartOrder applyPromo(CartOrder order,Integer promoId)throws PromocodeException;
+    public CartOrder removePromo(CartOrder order)throws CartOrderException;
+    public CartOrder addAddress(CartOrder order,Integer addressId)throws AddressException,CartOrderException;
+    public CartOrder confirmOrder(CartOrder order,Integer userId)throws UserException,CartOrderException;
+    
     
     public User addAddress(Address address,Integer userId)throws AddressException,UserException;
     public Address deleteAddress(Integer id)throws AddressException;

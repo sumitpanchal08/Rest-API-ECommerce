@@ -23,7 +23,7 @@ public class ProductOrderDetails {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer ProductOrderDetailId;
 	private Integer quantity;
-	private Double amount;
+//	private Double amount;
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="productId")

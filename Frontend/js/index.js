@@ -1,6 +1,6 @@
 let token=localStorage.getItem("token");
 let userObj=JSON.parse(localStorage.getItem("user")) || [];
-
+// let cartArr=JSON.parse(localStorage.getItem("cart")) || [];
 // console.log(userObj);
 if(token!=null){
     checkLogin(token);
@@ -82,9 +82,58 @@ function login(){
         console.log(3);
     }
 }
-
-function addToCart(id){
-
+function goCart(){
+    
+    if(token==null){
+        alert("Login First!!");
+    }else{
+        window.location.href="cart.html";
+        createOrder();
+    }
+}
+async function addToCart(id){
+    if(token==null){
+        alert("Login First!!");
+    }else{
+        createOrder();
+        let oid=-1;
+        for(let i=0;i<userObj.orders.length;i++){
+            if(userObj.orders[i].orderStatus=="PENDING"){
+                oid=userObj.orders[i].orderId;
+            }
+        }
+        let productObj={
+            'productId':id,
+            'quantity':1
+        }
+        try{
+            let res=await fetch("http://localhost:8880/user/order/addToCart/"+oid+"/"+id,{
+                method:'PUT',
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify(productObj)
+            });
+            let data=await res.json();
+            console.log(data);
+        }catch(err){
+            console.log(err);
+        }
+    }
+}
+async function createOrder(){
+    try{
+        let res=await fetch("http://localhost:8880/user/order/create/"+userObj.userId,{
+            method:'POST',
+            headers:{
+                "Content-Type":"application/json"
+            }
+        });
+        let data=await res.json();
+        console.log(data);
+    }catch(err){
+        console.log(err);
+    }
 }
 
 

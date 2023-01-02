@@ -1,6 +1,7 @@
 package com.dealsnow.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -10,6 +11,9 @@ import org.springframework.stereotype.Service;
 import com.dealsnow.dao.AddressDAO;
 import com.dealsnow.dao.CartOrderDAO;
 import com.dealsnow.dao.CurrentSessionDAO;
+import com.dealsnow.dao.ProductDAO;
+import com.dealsnow.dao.ProductOrderDetailsDAO;
+import com.dealsnow.dao.PromocodeDAO;
 import com.dealsnow.dao.UserDAO;
 import com.dealsnow.exceptions.AddressException;
 import com.dealsnow.exceptions.AdminException;
@@ -19,6 +23,7 @@ import com.dealsnow.exceptions.UserException;
 import com.dealsnow.models.Address;
 import com.dealsnow.models.CartOrder;
 import com.dealsnow.models.CurrentSession;
+import com.dealsnow.models.Product;
 import com.dealsnow.models.ProductOrderDetails;
 import com.dealsnow.models.Promocode;
 import com.dealsnow.models.User;
@@ -39,6 +44,16 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private AddressDAO addressDao;
+	
+	@Autowired
+	private PromocodeDAO promocodeDAO;
+	
+	@Autowired
+	private ProductDAO productDAO;
+	
+	@Autowired
+	private ProductOrderDetailsDAO poddao;
+	
 
 	@Override
 	public User registerUser(User user) throws UserException {
@@ -117,41 +132,7 @@ public class UserServiceImpl implements UserService {
 		return optional.get();
 	}
 
-	@Override
-	public CartOrder orderProducts(CartOrder order) throws CartOrderException {
-		// TODO Auto-generated method stub
-		User user=order.getUser();
-		if(user==null) {
-			throw new UserException("User Id not match");
-		}
-		Set<Address> addresses=user.getAddresses();
-		boolean flag=false;
-		for(Address a:addresses) {
-			if(a.getAddressId()==order.getAddress().getAddressId()) {
-				flag=true;
-				break;
-			}
-		}
-		if(!flag) {
-			throw new AddressException("Address is not match with the User");
-		}
-		Promocode pc=order.getPromocode();
-		double total=0;
-		order.setOrderDateTime(LocalDateTime.now());
-		order.setOrderStatus("PENDING");
-		
-		Set<ProductOrderDetails> details =order.getProductOrderDetails();
-		for(ProductOrderDetails d:details) {
-			total=total+(d.getAmount()*d.getQuantity());
-		}
-		if(pc.getAmt()>total) {
-			throw new PromocodeException("Promocode Not Valid for these Items");
-		}
-		total=total-pc.getAmt();
-		order.setTotalamount(total);
-		return cartOrderDAO.save(order);
-	}
-
+	
 	@Override
 	public User addAddress(Address address, Integer userId) throws AddressException, UserException {
 		// TODO Auto-generated method stub
@@ -177,4 +158,148 @@ public class UserServiceImpl implements UserService {
 		addressDao.delete(address.get());
 		return address.get();
 	}
+	
+	@Override
+	public CartOrder addToCart(ProductOrderDetails productOrderDetails,Integer oid,Integer pid) throws CartOrderException {
+		// TODO Auto-generated method stub
+		Optional<Product> optional1=productDAO.findById(pid);
+		if(!optional1.isPresent()) {
+			throw new CartOrderException("Product Id is not correct");
+		}
+		Product product=optional1.get();
+		Optional<CartOrder> optional=cartOrderDAO.findById(oid);
+		if(!optional.isPresent()) {
+			throw new CartOrderException("Order Id is not correct");
+		}
+		CartOrder order=optional.get();
+		if(order.getOrderStatus().equals("CONFIRMED")) {
+			throw new CartOrderException("Order already Confirmed!!");
+		}
+		Set<ProductOrderDetails> pods= order.getProductOrderDetails();
+		boolean flag=true;
+		for(ProductOrderDetails d: pods) {
+			if(d.getProduct().getProductId()==pid) {
+				int count=d.getQuantity();
+				flag=false;
+				count++;
+				d.setQuantity(count);
+			}
+		}
+		if(flag) {
+			productOrderDetails.setProduct(product);
+			pods.add(productOrderDetails);
+		}else {
+			
+		}
+		order.setProductOrderDetails(pods);
+		Double total=0.0;
+		Set<ProductOrderDetails> details=order.getProductOrderDetails();
+		order.setProductOrderDetails(details);
+		for(ProductOrderDetails d:details) {
+			total=total+(d.getProduct().getSellPrice()*d.getQuantity());
+		}
+		
+		order.setTotalamount(total);
+		CartOrder order2= cartOrderDAO.save(order);
+		return order2;
+	}
+
+	@Override
+	public CartOrder applyPromo(CartOrder order,Integer promoId) throws PromocodeException {
+		// TODO Auto-generated method stub
+		if(order.getOrderStatus().equals("CONFIRMED")) {
+			throw new CartOrderException("Order is Already Confirmed");
+		}
+		Optional<Promocode> optional=promocodeDAO.findById(promoId);
+		if(!optional.isPresent()) {
+			throw new UserException("Promocode is Not Valid!!");
+		}
+		Promocode promocode=order.getPromocode();
+		if(promocode!=null) {
+			throw new UserException("Promocode is Already Applied!!");
+		}
+		Promocode promo=optional.get();
+		order.setPromocode(promo);
+		if(promo.getAmt()>order.getTotalamount()) {
+			throw new UserException("Promocode can Apply here!!");
+		}
+		order.setTotalamount(order.getTotalamount()-promo.getAmt());
+		CartOrder order2=cartOrderDAO.save(order);
+		return order2;
+	}
+
+	@Override
+	public CartOrder addAddress(CartOrder order, Integer addressId) throws AddressException, CartOrderException {
+		// TODO Auto-generated method stub
+		if(order.getOrderStatus().equals("CONFIRMED")) {
+			throw new CartOrderException("Order is Already Confirmed");
+		}
+		Optional<Address> optional=addressDao.findById(addressId);
+		if(!optional.isPresent()) {
+			throw new UserException("Address is Not Valid!!");
+		}
+		order.setAddress(optional.get());
+		CartOrder order2=cartOrderDAO.save(order);
+		return order2;
+	}
+
+	@Override
+	public CartOrder removePromo(CartOrder order) throws CartOrderException {
+		if(order.getOrderStatus().equals("CONFIRMED")) {
+			throw new CartOrderException("Order already Confirmed!!");
+		}
+		order.setPromocode(null);
+		return cartOrderDAO.save(order);
+	}
+
+	@Override
+	public CartOrder confirmOrder(CartOrder order, Integer userId) throws UserException, CartOrderException {
+		// TODO Auto-generated method stub
+		if(order.getOrderStatus().equals("CONFIRMED")) {
+			throw new CartOrderException("Order already Confirmed!!");
+		}
+		Optional<User> optional=userdao.findById(userId);
+		if(!optional.isPresent() || optional.get().getUserId()!=order.getUser().getUserId()) {
+			throw new UserException("User Not Registered!!");
+		}
+		order.setOrderDateTime(LocalDateTime.now());
+		order.setOrderStatus("CONFIRMED");
+		Double total=0.0;
+		Set<ProductOrderDetails> details=order.getProductOrderDetails();
+		if(details.size()==0) {
+			throw new CartOrderException("No product in Cart!!");
+		}
+		for(ProductOrderDetails d:details) {
+			total=total+(d.getProduct().getSellPrice()*d.getQuantity());
+		}
+		Promocode promo=order.getPromocode();
+		if(promo.getAmt()>total) {
+			throw new UserException("Promocode can Apply here!!");
+		}
+		total=total-promo.getAmt();
+		order.setTotalamount(total);
+		CartOrder order2=cartOrderDAO.save(order);
+		return order2;
+	}
+
+	@Override
+	public CartOrder createOrder(Integer userId) throws UserException {
+		Optional<User> optional=userdao.findById(userId);
+		if(!optional.isPresent()) {
+			throw new UserException("User Not Registered!!");
+		}
+		// TODO Auto-generated method stub
+		List<CartOrder> orders=cartOrderDAO.findByUser(optional.get());
+		for(CartOrder o:orders) {
+			if(o.getOrderStatus().equals("PENDING")) {
+				return o;
+			}
+		}
+		CartOrder order=new CartOrder();
+		order.setUser(optional.get());
+		order.setOrderStatus("PENDING");
+		CartOrder order2=cartOrderDAO.save(order);
+		return order2;
+	}
+
 }
