@@ -205,12 +205,17 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public CartOrder applyPromo(CartOrder order,Integer promoId) throws PromocodeException {
+	public CartOrder applyPromo(Integer oid,String code) throws PromocodeException {
 		// TODO Auto-generated method stub
+		Optional<CartOrder> optional1=cartOrderDAO.findById(oid);
+		if(optional1==null) {
+			throw new CartOrderException("Order is not valid");
+		}
+		CartOrder order=optional1.get();
 		if(order.getOrderStatus().equals("CONFIRMED")) {
 			throw new CartOrderException("Order is Already Confirmed");
 		}
-		Optional<Promocode> optional=promocodeDAO.findById(promoId);
+		Optional<Promocode> optional=promocodeDAO.findByCode(code);
 		if(!optional.isPresent()) {
 			throw new UserException("Promocode is Not Valid!!");
 		}
@@ -221,7 +226,7 @@ public class UserServiceImpl implements UserService {
 		Promocode promo=optional.get();
 		order.setPromocode(promo);
 		if(promo.getAmt()>order.getTotalamount()) {
-			throw new UserException("Promocode can Apply here!!");
+			throw new UserException("Promocode cannot Apply here!!");
 		}
 		order.setTotalamount(order.getTotalamount()-promo.getAmt());
 		CartOrder order2=cartOrderDAO.save(order);
@@ -229,22 +234,32 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public CartOrder addAddress(CartOrder order, Integer addressId) throws AddressException, CartOrderException {
+	public CartOrder addAddress(Integer oid, Integer addressId) throws AddressException, CartOrderException {
 		// TODO Auto-generated method stub
+		Optional<CartOrder> optional=cartOrderDAO.findById(oid);
+		if(optional==null) {
+			throw new CartOrderException("Order is not valid");
+		}
+		CartOrder order=optional.get();
 		if(order.getOrderStatus().equals("CONFIRMED")) {
 			throw new CartOrderException("Order is Already Confirmed");
 		}
-		Optional<Address> optional=addressDao.findById(addressId);
-		if(!optional.isPresent()) {
+		Optional<Address> optional1=addressDao.findById(addressId);
+		if(!optional1.isPresent()) {
 			throw new UserException("Address is Not Valid!!");
 		}
-		order.setAddress(optional.get());
+		order.setAddress(optional1.get());
 		CartOrder order2=cartOrderDAO.save(order);
 		return order2;
 	}
 
 	@Override
-	public CartOrder removePromo(CartOrder order) throws CartOrderException {
+	public CartOrder removePromo(Integer oid) throws CartOrderException {
+		Optional<CartOrder> optional=cartOrderDAO.findById(oid);
+		if(optional==null) {
+			throw new CartOrderException("Order is not valid");
+		}
+		CartOrder order=optional.get();
 		if(order.getOrderStatus().equals("CONFIRMED")) {
 			throw new CartOrderException("Order already Confirmed!!");
 		}
@@ -253,10 +268,19 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public CartOrder confirmOrder(CartOrder order, Integer userId) throws UserException, CartOrderException {
+	public CartOrder confirmOrder(Integer oid, Integer userId) throws UserException, CartOrderException {
 		// TODO Auto-generated method stub
+		Optional<CartOrder> optional1=cartOrderDAO.findById(oid);
+		if(!optional1.isPresent()) {
+			throw new CartOrderException("Order is not valid");
+		}
+		CartOrder order=optional1.get();
 		if(order.getOrderStatus().equals("CONFIRMED")) {
 			throw new CartOrderException("Order already Confirmed!!");
+		}
+		Address address=order.getAddress();
+		if(address==null) {
+		    throw new CartOrderException("Address Cannot be null!!");
 		}
 		Optional<User> optional=userdao.findById(userId);
 		if(!optional.isPresent() || optional.get().getUserId()!=order.getUser().getUserId()) {
@@ -273,10 +297,12 @@ public class UserServiceImpl implements UserService {
 			total=total+(d.getProduct().getSellPrice()*d.getQuantity());
 		}
 		Promocode promo=order.getPromocode();
-		if(promo.getAmt()>total) {
-			throw new UserException("Promocode can Apply here!!");
+		if(promo!=null) {
+			if(promo.getAmt()>total) {
+				throw new UserException("Promocode cannot Apply here!!");
+			}
+			total=total-promo.getAmt();
 		}
-		total=total-promo.getAmt();
 		order.setTotalamount(total);
 		CartOrder order2=cartOrderDAO.save(order);
 		return order2;
@@ -300,6 +326,30 @@ public class UserServiceImpl implements UserService {
 		order.setOrderStatus("PENDING");
 		CartOrder order2=cartOrderDAO.save(order);
 		return order2;
+	}
+
+	@Override
+	public CartOrder removeFromCart(Integer oid, Integer podid) throws CartOrderException {
+		// TODO Auto-generated method stub
+		Optional<CartOrder> optional=cartOrderDAO.findById(oid);
+		if(!optional.isPresent()) {
+			throw new CartOrderException("Order is not Valid");
+		}
+		CartOrder order=optional.get();
+		Set<ProductOrderDetails> details=order.getProductOrderDetails();
+		for(ProductOrderDetails p:details) {
+			if(p.getProductOrderDetailId()==podid) {
+				details.remove(p);
+				Optional<ProductOrderDetails> pod=poddao.findById(podid);
+				ProductOrderDetails podDetails=pod.get();
+				podDetails.setProduct(null);
+				poddao.save(podDetails);
+				poddao.delete(podDetails);
+			}
+		}
+		
+		order.setProductOrderDetails(details);
+		return cartOrderDAO.save(order);
 	}
 
 }

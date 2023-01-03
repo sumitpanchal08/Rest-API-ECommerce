@@ -47,11 +47,13 @@ function goHome(){
     document.getElementById("home").style.display="block";
     document.getElementById("products").style.display="none";
     document.getElementById("address").style.display="none";
+    document.getElementById("orders").style.display="none";
 }
 function goProduct(){
     document.getElementById("home").style.display="none";
     document.getElementById("products").style.display="flex";
     document.getElementById("address").style.display="none";
+    document.getElementById("orders").style.display="none";
     getAllProducts();
     getAllCategories();
 }
@@ -62,9 +64,21 @@ function goAddress(){
         document.getElementById("home").style.display="none";
     document.getElementById("products").style.display="none";
     document.getElementById("address").style.display="flex";
+    document.getElementById("orders").style.display="none";
     showAddress();
     }
     
+}
+function goOrders(){
+    if(token==null){
+        alert("Login First!!");
+    }else{
+        document.getElementById("home").style.display="none";
+    document.getElementById("products").style.display="none";
+    document.getElementById("address").style.display="none";
+    document.getElementById("orders").style.display="block";
+    showOrders();
+    }
 }
 function login(){
     let loginDetails=document.getElementById("login").innerHTML;
@@ -116,6 +130,7 @@ async function addToCart(id){
             });
             let data=await res.json();
             console.log(data);
+            alert("Added to cart!!");
         }catch(err){
             console.log(err);
         }
@@ -211,7 +226,32 @@ function deleteAddress(id){
     };
 }
 
-
+function showOrders(){
+    let data=``;
+    userObj.orders.forEach(e => {
+        if(e.orderStatus=="CONFIRMED"){
+            data+=`<div>
+            <div>
+                <h3>Order Details</h3>
+                <p>OrderID:- ${e.orderId}</p>
+                <p>OrderStatus:- ${e.orderStatus}</p>
+                <p>Total Amount:- ${e.totalamount}</p>
+            </div>
+            <div>
+                <h3>Address Details</h3>
+                <p>AddressID:- ${e.address.addressId}</p>
+                <p>Address:- ${e.address.houseNumber}, ${e.address.city}, ${e.address.state}</p>
+                <p>Postal Code:- ${e.address.postalCode}</p>
+            </div>
+            <div>
+                <h3>Product details</h3>
+                <p>Total Products:- ${e.productOrderDetails.length}</p>
+            </div>
+        </div>`;
+        }
+    });
+    document.getElementById("orders").innerHTML=data;
+}
 
 
 

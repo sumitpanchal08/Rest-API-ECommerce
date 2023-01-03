@@ -112,24 +112,29 @@ public class UserController {
 		return new ResponseEntity<CartOrder>(userService.addToCart(pod,oid,pid),HttpStatus.ACCEPTED);
 	}
 	
-	@PutMapping("/order/applyPromo/{id}")
-	public ResponseEntity<CartOrder> applyPromo(@PathVariable("id")Integer pid,@RequestBody CartOrder order){
-		return new ResponseEntity<CartOrder>(userService.applyPromo(order,pid),HttpStatus.ACCEPTED);
+	@PutMapping("/order/removeFromCart/{oid}/{podid}")
+	public ResponseEntity<CartOrder> removeFromCart(@PathVariable("oid")Integer oid,@PathVariable("podid")Integer podid){
+		return new ResponseEntity<CartOrder>(userService.removeFromCart(oid, podid),HttpStatus.ACCEPTED);
 	}
 	
-	@PutMapping("/order/removePromo")
-	public ResponseEntity<CartOrder> removePromo(@RequestBody CartOrder order){
-		return new ResponseEntity<CartOrder>(userService.removePromo(order),HttpStatus.ACCEPTED);
+	@PutMapping("/order/applyPromo/{oid}/{code}")
+	public ResponseEntity<CartOrder> applyPromo(@PathVariable("code")String code,@PathVariable("oid")Integer oid){
+		return new ResponseEntity<CartOrder>(userService.applyPromo(oid,code),HttpStatus.ACCEPTED);
 	}
 	
-	@PutMapping("/order/addAddress/{id}")
-	public ResponseEntity<CartOrder> addAddress(@PathVariable("id")Integer pid,@RequestBody CartOrder order){
-		return new ResponseEntity<CartOrder>(userService.addAddress(order,pid),HttpStatus.ACCEPTED);
+	@PutMapping("/order/removePromo/{oid}")
+	public ResponseEntity<CartOrder> removePromo(@PathVariable("oid")Integer oid){
+		return new ResponseEntity<CartOrder>(userService.removePromo(oid),HttpStatus.ACCEPTED);
 	}
 	
-	@PutMapping("order/confirm/{uid}")
-	public ResponseEntity<CartOrder> confirmOrder(@PathVariable("uid")Integer uid,@RequestBody CartOrder order){
-		return new ResponseEntity<CartOrder>(userService.confirmOrder(order, uid),HttpStatus.ACCEPTED);
+	@PutMapping("/order/addAddress/{oid}/{id}")
+	public ResponseEntity<CartOrder> addAddress(@PathVariable("id")Integer pid,@PathVariable("oid")Integer oid){
+		return new ResponseEntity<CartOrder>(userService.addAddress(oid,pid),HttpStatus.ACCEPTED);
+	}
+	
+	@PutMapping("order/confirm/{uid}/{oid}")
+	public ResponseEntity<CartOrder> confirmOrder(@PathVariable("uid")Integer uid,@PathVariable("oid")Integer oid){
+		return new ResponseEntity<CartOrder>(userService.confirmOrder(oid, uid),HttpStatus.ACCEPTED);
 	}
 	
 	

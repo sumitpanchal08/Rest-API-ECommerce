@@ -21,10 +21,11 @@ public interface UserService {
 	
 	public CartOrder createOrder(Integer userId)throws UserException;
     public CartOrder addToCart(ProductOrderDetails p,Integer oid,Integer pid) throws CartOrderException;
-    public CartOrder applyPromo(CartOrder order,Integer promoId)throws PromocodeException;
-    public CartOrder removePromo(CartOrder order)throws CartOrderException;
-    public CartOrder addAddress(CartOrder order,Integer addressId)throws AddressException,CartOrderException;
-    public CartOrder confirmOrder(CartOrder order,Integer userId)throws UserException,CartOrderException;
+    public CartOrder removeFromCart(Integer oid,Integer podid) throws CartOrderException;
+    public CartOrder applyPromo(Integer oid,String code)throws PromocodeException;
+    public CartOrder removePromo(Integer oid)throws CartOrderException;
+    public CartOrder addAddress(Integer oid,Integer addressId)throws AddressException,CartOrderException;
+    public CartOrder confirmOrder(Integer oid,Integer userId)throws UserException,CartOrderException;
     
     
     public User addAddress(Address address,Integer userId)throws AddressException,UserException;

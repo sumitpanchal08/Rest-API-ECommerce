@@ -49,6 +49,71 @@ font-family: 'Ubuntu', sans-serif; */
 #home{
     display: block;
 }
+#home>div:nth-child(1)>div:nth-child(1){
+    background-image: url("/img/background.jpg");
+    background-color: #cccccc;
+   /* Add the blur effect */
+  filter: blur(8px);
+  -webkit-filter: blur(8px);
+
+  /* Full height */
+  height: 500px;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+#home p{
+    color: rgb(103, 103, 103);
+}
+#home button{
+    padding: 10px 20px;
+    margin-top: 20px;
+    background-color: #333;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#home>div:nth-child(1)>div:nth-child(2){
+    font-size: 1.9rem;
+  color: #333;
+  font-weight: bold;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: 80%;
+  padding: 20px;
+  text-align: center;
+}
+#home>div:nth-child(2){
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+}
+#home>div:nth-child(2)>div:nth-child(1){
+    width: 50%;
+    color: #454545;
+    background-color: #cccccc;
+    height: 350px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+#home>div:nth-child(2)>div:nth-child(2){
+    width: 50%;
+    background-color: #454545;
+    color: #cccccc;
+    height: 350px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
 #products{
     display: none;
     justify-content: center;
@@ -140,6 +205,25 @@ font-family: 'Ubuntu', sans-serif; */
     cursor: pointer;
 }
 
+
+#orders{
+    display: none;
+}
+
+#orders>div{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border: 2px solid #333;
+    /* border-radius: 10px; */
+    margin: 20px 30px;
+}
+#orders>div:hover{
+    border: 2px solid rgb(178, 73, 73);
+}
+#orders>div>div{
+    margin: 15px;
+}
 
 
 

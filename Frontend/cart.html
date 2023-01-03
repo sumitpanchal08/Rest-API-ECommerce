@@ -33,18 +33,16 @@
                 </div>
             </div>
             <div>
-                <input type="text" id="promocode" placeholder="Apply Promocode">
-                <p>Apply</p>
+                <input type="text" id="promocode" name="promocode" placeholder="Apply Promocode">
+                <p id="promocode1" onclick="applyPromo()">Apply</p>
             </div>
             <div>
-                <select name="address" id="address">
-                    <option value="">Select Address here</option>
-                    <option value="add">Add New Address</option>
+                <select name="address" id="address" onchange="selectAddress()">
                 </select>
             </div>
             <div>
-                <button id="confirmOrder">Confirm Order</button>
-            </div>
+                <button id="confirmOrder" onclick="confirmOrder()">Confirm Order</button>
+            </div><button onclick="goToHome()">Go Home</button>
         </div>
         <div id="products">
             <div>
@@ -53,13 +51,14 @@
                     </div>
                     <p>category</p>
                     <h3>Name_big_name</h3>
-                    <p>$200</p>
-                    <span> - </span><span>2</span><span> + </span>
+                    <p>Price:- $200</p>
+                    <p>Quantity:- 2</p>
                     <button>Remove</button>
                 </div>
         </div>
+        
     </div>
-    <button onclick="goToHome()">Browse catalogue</button>
+    
 
 </body>
 <script src="js/cart.js"></script>
