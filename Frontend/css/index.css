@@ -122,8 +122,8 @@ font-family: 'Ubuntu', sans-serif; */
 #products>div:nth-child(1){
     background-color: #333;
     color: white;
-    width: 20%;
-    height: 100vh;
+    width: 25%;
+    /* height: 100vh; */
     display: flex;
     flex-direction: column;
 }
@@ -143,17 +143,50 @@ font-family: 'Ubuntu', sans-serif; */
     width: 50%;
 }
 #products>div:nth-child(2){
-    width: 80%;
+    width: 75%;
 }
 #resultProducts{
     display: grid;
     margin: 25px 30px;
-    grid-template-columns: repeat(4,1fr);
+    grid-template-columns: repeat(3,1fr);
     gap: 20px;
 }
+#resultProducts>div{
+    padding: 20px 10px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    transition: transform .1s ease-in-out;
+}
+#resultProducts>div:hover{
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    transition: transform .8s ease-in-out;
+    transform: scale(1.1);
+}
+#resultProducts>div>p{
+    color: #818181;
+}
+#resultProducts>div>p:nth-child(3){
+    color: #000000;
+    font-size: 1.1rem;
+}
+#resultProducts>div>button{
+    font-size: 1.1rem;
+    padding: 5px 0px;
+    width: 100%;
+    background-color: #333;
+    color: white;
+}
+#resultProducts>div>button:hover{
+    background-color: rgb(94, 94, 94);
+    cursor: pointer;
+}
+#resultProducts>div>div{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 #resultProducts>div>div>img{
-    max-width: 100%;
-    max-height: 200px;
+    height: 200px;
 }
 #address{
     display: none;
@@ -179,29 +212,38 @@ font-family: 'Ubuntu', sans-serif; */
 }
 #address>div:nth-child(1)>form>input{
     margin: 10px 0px;
+    padding: 5px 0px;
     width: 100%;
     text-align: center;
 }
 #address>div:nth-child(2){
     width: 80%;
     display: grid;
-    grid-template-columns: repeat(4,1fr);
+    grid-template-columns: repeat(3,1fr);
     gap: 10px;
 }
 #address>div:nth-child(2)>div{
     margin: 10px;
-    border: 2px solid black;
+    padding: 20px 10px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+#address>div:nth-child(2)>div:hover{
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 #address>div:nth-child(2)>div>h3,p{
     margin: 5px 0px 5px 10px;
 }
 #address>div:nth-child(2)>div>div{
-    width: 50%;
+    width: 100%;
     margin: auto;
 }
 #address>div:nth-child(2)>div>div>button{
+    font-size: 1.1rem;
+    padding: 5px 0px;
+    margin: 10px 0px 0px 0px ;
     width: 100%;
-    margin: 10px 0px;
+    background-color: #333;
+    color: white;
     cursor: pointer;
 }
 

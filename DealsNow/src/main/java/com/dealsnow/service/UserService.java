@@ -1,5 +1,7 @@
 package com.dealsnow.service;
 
+import java.util.List;
+
 import com.dealsnow.exceptions.AddressException;
 import com.dealsnow.exceptions.AdminException;
 import com.dealsnow.exceptions.CartOrderException;
@@ -18,6 +20,7 @@ public interface UserService {
 	public String logoutUser(String uuid) throws UserException;
 	public User getLoginDetails(String uuid) throws UserException;
 	public Boolean checkLoginStatus(String uuid)throws UserException;
+	public List<User> getAllUsers()throws UserException;
 	
 	public CartOrder createOrder(Integer userId)throws UserException;
     public CartOrder addToCart(ProductOrderDetails p,Integer oid,Integer pid) throws CartOrderException;

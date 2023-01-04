@@ -1,10 +1,10 @@
 let token=localStorage.getItem("token");
 let userObj=JSON.parse(localStorage.getItem("user")) || [];
-// let cartArr=JSON.parse(localStorage.getItem("cart")) || [];
-// console.log(userObj);
+
 if(token!=null){
     checkLogin(token);
 }
+
 async function checkLogin(token){
     let t=token;
     try{
@@ -54,8 +54,13 @@ function goProduct(){
     document.getElementById("products").style.display="flex";
     document.getElementById("address").style.display="none";
     document.getElementById("orders").style.display="none";
-    getAllProducts();
+    createOrder();
+    setTimeout(function(){
+        getAllProducts();
     getAllCategories();
+    },500);
+    
+    
 }
 function goAddress(){
     if(token==null){
@@ -101,15 +106,23 @@ function goCart(){
     if(token==null){
         alert("Login First!!");
     }else{
-        window.location.href="cart.html";
+        checkLogin(token);
         createOrder();
+        setTimeout(function(){
+            window.location.href="cart.html";
+        },500);
+        
+        
     }
 }
 async function addToCart(id){
     if(token==null){
         alert("Login First!!");
     }else{
-        createOrder();
+        
+        setTimeout(function(){
+            
+        })
         let oid=-1;
         for(let i=0;i<userObj.orders.length;i++){
             if(userObj.orders[i].orderStatus=="PENDING"){
@@ -273,8 +286,8 @@ function show(data){
         <img src="${img}" alt="">
     </div>
     <p>${e.category.name}</p>
-    <h3>${e.name}</h3>
-    <p>$${e.sellPrice}</p>
+    <p>${e.name}</p>
+    <p>Price:- $${e.sellPrice}</p>
     <button onclick="addToCart(${e.productId})">Add to Cart</button>
     </div>`
     });

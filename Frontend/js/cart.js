@@ -1,11 +1,6 @@
 let token=localStorage.getItem("token");
 let userObj=JSON.parse(localStorage.getItem("user")) || [];
-// let cartArr=JSON.parse(localStorage.getItem("cart")) || [];
-// console.log(userObj);
-if(token!=null){
-    checkLogin(token);
-}
-async function checkLogin(token){
+async function checkLogin(){
     let t=token;
     try{
         let res=await fetch("http://localhost:8880/user/login/details/"+t,{
@@ -18,6 +13,13 @@ async function checkLogin(token){
             if(data.message==undefined){
                 userObj=data;
                 localStorage.setItem("user",JSON.stringify(userObj));
+                for(let i=0;i<userObj.orders.length;i++){
+                    if(userObj.orders[i].orderStatus=="PENDING"){
+                        cartArr=userObj.orders[i].productOrderDetails;
+                        displayProducts(cartArr);
+                    }
+                }
+                location.reload();
                 // document.getElementById("login").innerHTML="Logout";
             }else{
                 alert(data.message);
@@ -49,6 +51,7 @@ function checkCart(){
 }
 
 function displayProducts(arr){
+    
     document.getElementById("products").innerHTML="";
     let img="https://icon2.cleanpng.com/20180605/ijl/kisspng-computer-icons-image-file-formats-no-image-5b16ff0d2414b5.0787389815282337411478.jpg";
     let data=``;
@@ -92,6 +95,8 @@ function displayProducts(arr){
         document.getElementById("overTotal").innerHTML=order.totalamount-order.promocode.amt;
         document.getElementById("promocode1").innerHTML="Remove";
         document.getElementsByName("promocode")[0].placeholder="Promocode Applied";
+        document.getElementById("promocode").readOnly=true;
+        document.getElementById("promocode").style.cursor="not-allowed";
     }
     
 
@@ -108,9 +113,8 @@ async function removeFromCart(id){
         });
             let data=await res.json();
             if(data.message==undefined){
-                alert("Product Removed");
-                checkLogin(token);
-                location.reload();
+                displayProducts(cartArr);
+                checkLogin();
             }else{
                 alert(data.message);
                 console.log(data);
@@ -135,7 +139,7 @@ async function applyPromo(){
                 if(data.message==undefined){
                     displayProducts(cartArr);
                     alert("Promocode Applied Successfull!!");
-                    location.reload();
+                    checkLogin();
                 }else{
                     alert(data.message);
                 }
@@ -154,7 +158,7 @@ async function applyPromo(){
                 if(data.message==undefined){
                     displayProducts(cartArr);
                     alert("Promocode Removed Successfull!!");
-                    location.reload();
+                    checkLogin();
                 }else{
                     alert(data.message);
                 }
@@ -178,7 +182,7 @@ async function selectAddress(){
             if(data.message==undefined){
                 displayProducts(cartArr);
                 alert("Address changed Successfull!!");
-                location.reload();
+                checkLogin();
             }else{
                 alert(data.message);
             }
@@ -199,7 +203,7 @@ async function confirmOrder(){
             if(data.message==undefined){
                 displayProducts(cartArr);
                 alert("Order Confirmed Successfull!!");
-                location.reload();
+                checkLogin();
             }else{
                 alert(data.message);
             }

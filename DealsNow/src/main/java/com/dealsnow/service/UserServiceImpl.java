@@ -263,6 +263,9 @@ public class UserServiceImpl implements UserService {
 		if(order.getOrderStatus().equals("CONFIRMED")) {
 			throw new CartOrderException("Order already Confirmed!!");
 		}
+		Promocode promocode=order.getPromocode();
+		Double double1=order.getTotalamount();
+		order.setTotalamount(double1+promocode.getAmt());
 		order.setPromocode(null);
 		return cartOrderDAO.save(order);
 	}
@@ -337,6 +340,7 @@ public class UserServiceImpl implements UserService {
 		}
 		CartOrder order=optional.get();
 		Set<ProductOrderDetails> details=order.getProductOrderDetails();
+		Double total=0.0;
 		for(ProductOrderDetails p:details) {
 			if(p.getProductOrderDetailId()==podid) {
 				details.remove(p);
@@ -345,11 +349,29 @@ public class UserServiceImpl implements UserService {
 				podDetails.setProduct(null);
 				poddao.save(podDetails);
 				poddao.delete(podDetails);
+			}else {
+				total=total+(p.getProduct().getSellPrice()*p.getQuantity());
 			}
 		}
-		
+		Promocode promocode=order.getPromocode();
+		if(promocode!=null) {
+			if(promocode.getAmt()>total) {
+				order.setPromocode(null);
+			}else {
+				total=total+promocode.getAmt();
+			}
+			
+		}
 		order.setProductOrderDetails(details);
+		order.setTotalamount(total);
 		return cartOrderDAO.save(order);
+	}
+
+	@Override
+	public List<User> getAllUsers() throws UserException {
+		// TODO Auto-generated method stub
+		List<User> users=userdao.findAll();
+		return users;
 	}
 
 }

@@ -24,10 +24,12 @@ import com.dealsnow.models.Category;
 import com.dealsnow.models.Product;
 import com.dealsnow.models.ProductImg;
 import com.dealsnow.models.Promocode;
+import com.dealsnow.models.User;
 import com.dealsnow.service.AdminService;
 import com.dealsnow.service.CategoryService;
 import com.dealsnow.service.ProductService;
 import com.dealsnow.service.PromocodeService;
+import com.dealsnow.service.UserService;
 
 @RestController
 @RequestMapping("/Admin")
@@ -44,16 +46,22 @@ public class AdminController {
 	@Autowired
 	private PromocodeService promocodeService;
 	
+	@Autowired
+	private UserService userService;
+	
+	//register admin
 	@PostMapping("/register")
 	public ResponseEntity<Admin> registerAdmin(@Valid @RequestBody Admin admin){
 		return new ResponseEntity<>(adminService.registerAdmin(admin),HttpStatus.ACCEPTED);
 	}
 	
+	//login admin
 	@PostMapping("/login")
 	public ResponseEntity<String> loginAdmin(@Valid @RequestBody AdminDTO adminDTO){
 		return new ResponseEntity<>(adminService.loginAdmin(adminDTO),HttpStatus.ACCEPTED);
 	}
 	
+	//logout admin
 	@DeleteMapping("/logout/{uuid}")
 	public ResponseEntity<String> logoutAdmin(@Valid @PathVariable("uuid") String uuid){
 		return new ResponseEntity<String>(adminService.logoutAdmin(uuid),HttpStatus.ACCEPTED);
@@ -103,5 +111,11 @@ public class AdminController {
 	@GetMapping("/promocode")
 	public ResponseEntity<List<Promocode>> getAllPromocodes(){
 		return new ResponseEntity<List<Promocode>>(promocodeService.viewPromocodes(),HttpStatus.ACCEPTED);
+	}
+	
+	//view Users
+	@GetMapping("/users")
+	public ResponseEntity<List<User>> getAllUsers(){
+		return new ResponseEntity<List<User>>(userService.getAllUsers(),HttpStatus.ACCEPTED);
 	}
 }
